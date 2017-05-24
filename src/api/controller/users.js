@@ -16,7 +16,7 @@ export default class extends Base {
      * 登录
      */
     async loginAction() {
-        if (this.isGet()) return this.end();
+        if (this.isGet()) return this.fail('params error');
         let values = this.post();
         let model = this.model('users');
         let data = await model.where({
@@ -31,7 +31,7 @@ export default class extends Base {
      * 注册
      */
     async registerAction() {
-        if (this.isGet()) return this.end();
+        if (this.isGet()) return this.fail('params error');
         let values = this.post();
         let model = this.model('users');
         let insertId = await model.thenAdd(
@@ -46,5 +46,31 @@ export default class extends Base {
         );
 
         return this.success(insertId);
+    }
+
+    /**
+     * 注销
+     */
+    async logoutAction() {
+        this.checkAuth();
+        await this.session();
+        return this.success();
+    }
+
+    /**
+     * 更新
+     */
+    async updateAction() {
+        let data = this.post();
+        if(!data.id) return this.fail('params error');
+        let model = this.model('users')
+        let pk = await model.getPk();
+        let id = data.id;
+        delete data[pk];
+        if (think.isEmpty(data)) {
+            return this.fail('data is empty');
+        }
+        let rows = await model.where({[pk]: id}).update(data);
+        return this.success({affectedRows: rows});
     }
 }
