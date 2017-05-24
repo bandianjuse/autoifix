@@ -12,13 +12,7 @@ export default class extends think.controller.rest {
   init(http){
     super.init(http);
   }
-  /**
-   * before magic method
-   * @return {Promise} []
-   */
-  __before(){
-    
-  }
+
 
   /**
    * 查询数据

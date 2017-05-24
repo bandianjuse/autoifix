@@ -10,7 +10,7 @@ export default class extends think.logic.base {
    * @return {} []
    */
   indexAction(){
-
+   
   }
 
   /**
@@ -22,7 +22,7 @@ export default class extends think.logic.base {
   }
 
   /**
-   * 新增数据
+   * 新增
    */
   async postAction() {
     let auth = await this.checkAuth();

@@ -13,19 +13,29 @@ export default class extends think.controller.rest {
         super.init(http);
     }
 
+    /**
+     * before magic method
+     * @return {Promise} []
+     */
+    __before() {
+
+    }
+
+    /**
+     * 权限验证
+     */
+    async checkAuth() {
+        let value = await this.session('userInfo');
+        return think.isEmpty(value);
+    }
 
     /**
      * 查询数据
      */
     async getAction() {
         let data;
-        if (this.id) {
-            let pk = await this.modelInstance.getPk();
-            data = await this.modelInstance.where({ [pk]: this.id }).find();
-            return this.success(data);
-        }
-        let values = this.get();
-        data = await this.modelInstance.page(values.page, values.pageSize || 10).countSelect();
+
+        data = await this.modelInstance.userDynamic();
         return this.success(data);
     }
 
@@ -34,6 +44,11 @@ export default class extends think.controller.rest {
      * @return {Promise} []
      */
     async postAction() {
+        let auth = await this.checkAuth();
+        if(auth){
+            return this.fail('没有权限！');
+        }
+
         let pk = await this.modelInstance.getPk();
         let data = this.post();
         delete data[pk];
@@ -48,22 +63,13 @@ export default class extends think.controller.rest {
      * 删除数据
      */
     async deleteAction() {
-        let pk = await this.modelInstance.getPk();
-        let rows = await this.modelInstance.where({ [pk]: this.id }).delete();
-        return this.success({ affectedRows: rows });
+        return this.fail();
     }
 
     /**
      * 更新数据
      */
     async putAction() {
-        let pk = await this.modelInstance.getPk();
-        let data = this.post();
-        delete data[pk];
-        if (think.isEmpty(data)) {
-            return this.fail('data is empty');
-        }
-        let rows = await this.modelInstance.where({ [pk]: this.id }).update(data);
-        return this.success({ affectedRows: rows });
+        return this.fail();
     }
 }

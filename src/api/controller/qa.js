@@ -14,22 +14,6 @@ export default class extends think.controller.rest {
     }
 
     /**
-     * before magic method
-     * @return {Promise} []
-     */
-    __before() {
-
-    }
-
-    /**
-     * 权限验证
-     */
-    async checkAuth() {
-        let value = await this.session('userInfo');
-        return think.isEmpty(value);
-    }
-
-    /**
      * 查询数据
      */
     async getAction() {
@@ -49,10 +33,6 @@ export default class extends think.controller.rest {
      * @return {Promise} []
      */
     async postAction() {
-        let auth = await this.checkAuth();
-        if(auth){
-            return this.fail('没有权限！');
-        }
 
         let pk = await this.modelInstance.getPk();
         let data = this.post();
@@ -68,10 +48,6 @@ export default class extends think.controller.rest {
      * 删除数据
      */
     async deleteAction() {
-        let auth = await this.checkAuth();
-        if(auth){
-            return this.fail('没有权限！');
-        }
         let pk = await this.modelInstance.getPk();
         let rows = await this.modelInstance.where({ [pk]: this.id }).delete();
         return this.success({ affectedRows: rows });
@@ -81,10 +57,7 @@ export default class extends think.controller.rest {
      * 更新数据
      */
     async putAction() {
-        let auth = await this.checkAuth();
-        if(auth){
-            return this.fail('没有权限！');
-        }
+
         let pk = await this.modelInstance.getPk();
         let data = this.post();
         delete data[pk];
