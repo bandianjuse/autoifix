@@ -28,7 +28,7 @@ export default class extends think.controller.rest {
             return this.success(data);
         }
         let values = this.get();
-        data = await this.modelInstance.page(values.page, values.pageSize || 10).countSelect();
+        data = await this.modelInstance.field('id,pid,name').select();
         return this.success(data);
     }
 

@@ -18,5 +18,10 @@ export default {
     mongo: {
 
     }
+  },
+  cache: {
+    on: true,
+    type: 'redis',
+    timeout: 3600
   }
 };

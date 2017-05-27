@@ -30,7 +30,7 @@ export default class extends think.controller.rest {
             return this.success(data);
         }
         let values = this.get();
-        data = await this.modelInstance.page(values.page, values.pageSize || 10).countSelect();
+        data = await this.modelInstance.cache('guide_comments').page(values.page, values.pageSize || 10).countSelect();
         return this.success(data);
     }
 
