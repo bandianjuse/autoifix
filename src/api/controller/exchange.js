@@ -25,7 +25,7 @@ export default class extends think.controller.rest {
             return this.success(data);
         }
         let values = this.get();
-        data = await this.modelInstance.page(values.page, values.pageSize || 10).countSelect();
+        data = await this.modelInstance.page(values.page, values.pageSize || 10).where({title : ['like', '%' + values.title + '%']}).order('id DESC').countSelect();
         return this.success(data);
     }
 
@@ -49,7 +49,7 @@ export default class extends think.controller.rest {
      */
     async deleteAction() {
         let pk = await this.modelInstance.getPk();
-        let rows = await this.modelInstance.where({ [pk]: this.id }).delete();
+        let rows = await this.modelInstance.where({ [pk]: ['IN', this.id ]}).delete();
         return this.success({ affectedRows: rows });
     }
 

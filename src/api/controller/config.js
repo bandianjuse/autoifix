@@ -13,30 +13,19 @@ export default class extends think.controller.rest {
         super.init(http);
     }
 
-
     /**
      * 查询数据
      */
     async getAction() {
         let data;
         if (this.id) {
-            if(this.get('all')){
-                data = await this.modelInstance.guideAll(this.id);
-                return this.success(data);
-            }else{
-                let pk = await this.modelInstance.getPk();
-                data = await this.modelInstance.where({ [pk]: this.id }).find();
-                return this.success(data);
-            }
+            let pk = await this.modelInstance.getPk();
+            data = await this.modelInstance.where({ [pk]: this.id }).find();
+            return this.success(data);
         }
-        let title = this.get('title');
-        let state = this.get('state');
-        let pageNo = this.get('pageNo');
-        let pageSize = this.get('pageSize') || 10;
-        let where = {};
-        if (title) where.title = ['like', '%' + title + '%'];
-        if (state) where.state = state;
-        data = await this.modelInstance.page(pageNo, pageSize).where(where).countSelect();
+
+        let values = this.get();
+        data = await this.modelInstance.select();
         return this.success(data);
     }
 
@@ -49,7 +38,7 @@ export default class extends think.controller.rest {
         let data = this.post();
         delete data[pk];
         if (think.isEmpty(data)) {
-            return this.fail('data is empty');
+            return this.fail('数据不能为空！');
         }
         let insertId = await this.modelInstance.add(data);
         return this.success({ id: insertId });
@@ -59,9 +48,6 @@ export default class extends think.controller.rest {
      * 删除数据
      */
     async deleteAction() {
-        if (!this.id) {
-            return this.fail('params error');
-        }
         let pk = await this.modelInstance.getPk();
         let rows = await this.modelInstance.where({ [pk]: this.id }).delete();
         return this.success({ affectedRows: rows });
@@ -71,12 +57,8 @@ export default class extends think.controller.rest {
      * 更新数据
      */
     async putAction() {
-        if (!this.id) {
-            return this.fail('params error');
-        }
         let pk = await this.modelInstance.getPk();
         let data = this.post();
-
         delete data[pk];
         if (think.isEmpty(data)) {
             return this.fail('data is empty');
@@ -84,6 +66,4 @@ export default class extends think.controller.rest {
         let rows = await this.modelInstance.where({ [pk]: this.id }).update(data);
         return this.success({ affectedRows: rows });
     }
-
-
 }

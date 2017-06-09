@@ -13,6 +13,16 @@ export default class extends Base {
     }
 
     /**
+     * 查询列表
+     */
+    async listAction() {
+        let values = this.get();
+        let model = this.model('users');
+        let data = await model.page(values.page, values.pageSize || 10).where({account : ['like', '%' + values.account + '%']}).fieldReverse('password').order('id DESC').countSelect();
+        return this.success(data);
+    }
+
+    /**
      * 登录
      */
     async loginAction() {

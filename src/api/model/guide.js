@@ -24,10 +24,9 @@ export default class extends think.model.relation {
                 field: 'account,avatar'
             },
             category: {
-                type: think.model.HAS_ONE,
-                key : 'category_type_id',
-                fKey: 'id',
-                field: 'name'
+                type: think.model.MANY_TO_MANY,
+                rModel: 'guide_category',
+                rfKey: 'category_id'
             },
             tool: {
                 type: think.model.HAS_ONE,
