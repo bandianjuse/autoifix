@@ -1,7 +1,7 @@
 'use strict';
 
 import Base from './base.js';
-
+import Request from 'request';
 export default class extends Base {
     /**
      * index action
@@ -99,5 +99,41 @@ export default class extends Base {
         let model = this.model('users');
         let data = await model.userThumbUp(userId);
         return this.success(data);
+    }
+
+    /**
+     * 短信
+     */
+    async smsAction() {
+        let mobile = this.get('mobile');
+        let apikey = this.config('sms').apikey;
+        let apiurl = this.config('sms').apiurl;
+       /* let Request = think.service('request');
+        let request = new Request();*/
+        let code = randomCode();
+        let text = '您的验证码是'+ code;
+        let params = {
+            apikey: apikey,
+            mobile: mobile,
+            text: text
+        };
+
+        let requestPost = function(params){
+            let requestPromise = think.promisify(Request.post, Request);
+            return requestPromise(params);
+        };
+        let response = await requestPost({
+            url: apiurl,
+            form: params
+        }).then((response) => {
+            return response;
+        });
+        if(response.statusCode == 200){
+            return this.success(response.body);
+        }else{
+            return this.fail(response.body);
+        }
+
+
     }
 }
