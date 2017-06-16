@@ -29,6 +29,7 @@ export default class extends think.controller.rest {
                 return this.success(data);
             }
         }
+
         let title = this.get('title');
         let state = this.get('state');
         let pageNo = this.get('pageNo');

@@ -27,6 +27,15 @@ export default class extends think.controller.rest {
             data = await this.modelInstance.where({ pid: this.get('pid') }).select();
             return this.success(data);
         }
+        if(this.get('cid')){
+            let pageNo = this.get('pageNo');
+            let pageSize = this.get('pageSize') || 10;
+            let cid = JSON.parse(this.get('cid'));
+            if(cid.length){
+                data = await this.modelInstance.category(cid,pageNo, pageSize);
+            }
+            return this.success(data);
+        }
         let values = this.get();
         data = await this.modelInstance.field('id,pid,name').select();
         return this.success(data);

@@ -37,4 +37,6 @@ export default class extends think.model.relation {
         };
         return await this.where({[this.pk] : pk}).find();
     }
+
+    
 }

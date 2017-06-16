@@ -129,7 +129,7 @@ export default class extends Base {
             return response;
         });
         if(response.statusCode == 200){
-            return this.success(response.body);
+            return this.success(code);
         }else{
             return this.fail(response.body);
         }
