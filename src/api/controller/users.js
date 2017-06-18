@@ -125,8 +125,6 @@ export default class extends Base {
         let response = await requestPost({
             url: apiurl,
             form: params
-        }).then((response) => {
-            return response;
         });
         if(response.statusCode == 200){
             return this.success(code);
