@@ -36,7 +36,13 @@ export default class extends think.controller.rest {
             data = await this.modelInstance.where({user_id: this.get('user_id')}).select();
             return this.success(data);
         }
-        data = await this.modelInstance.select();
+
+        let title = this.get('title');
+        let pageNo = this.get('pageNo');
+        let pageSize = this.get('pageSize') || 10;
+        let where = {};
+        if (title) where.title = ['like', '%' + title + '%'];
+        data = await this.modelInstance.page(pageNo, pageSize).where(where).countSelect();
         return this.success(data);
     }
 

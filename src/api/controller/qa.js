@@ -24,7 +24,15 @@ export default class extends think.controller.rest {
             return this.success(data);
         }
         let values = this.get();
-        data = await this.modelInstance.page(values.page, values.pageSize || 10).countSelect();
+        let where = {};
+        let para = {
+            pageNo : values.pageNo || 1,
+            pageSize : values.pageSize || 10,
+            where : {}
+        };
+        if(values.state) para.where.state = values.state;
+
+        data = await this.modelInstance.qaAll(para);
         return this.success(data);
     }
 
