@@ -37,7 +37,7 @@ export default class extends Base {
         let data = await model.where({
             account: values.account,
             password: password
-        }).field('id,account,phone,nickname').select();
+        }).field('id,account,phone,nickname,integral,avatar').select();
         await this.session('userInfo', data);
         return this.success(data);
     }

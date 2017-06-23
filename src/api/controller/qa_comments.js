@@ -30,7 +30,14 @@ export default class extends think.controller.rest {
             return this.success(data);
         }
         let values = this.get();
-        data = await this.modelInstance.page(values.page, values.pageSize || 10).countSelect();
+
+        let para = {
+            pageNo : values.pageNo || 1,
+            pageSize : values.pageSize || 10,
+            qa_id :  values.qa_id
+        };
+
+        data = await this.modelInstance.userCommentsQuery(para);
         return this.success(data);
     }
 
