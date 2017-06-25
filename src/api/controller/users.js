@@ -18,7 +18,10 @@ export default class extends Base {
     async listAction() {
         let values = this.get();
         let model = this.model('users');
-        let data = await model.page(values.page, values.pageSize || 10).where({account : ['like', '%' + values.account + '%']}).fieldReverse('password').order('id DESC').countSelect();
+        let where = {};
+        if(values.account) where.account = ['like', '%' + values.account + '%'];
+        if(values.id) where.id = values.id;
+        let data = await model.page(values.pageNo || 1, values.pageSize || 10).where(where).fieldReverse('password').order('id DESC').countSelect();
         return this.success(data);
     }
 
