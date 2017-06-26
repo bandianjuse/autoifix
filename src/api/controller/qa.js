@@ -31,6 +31,7 @@ export default class extends think.controller.rest {
             where : {}
         };
         if(values.state) para.where.state = values.state;
+        if(values.user_id) para.where.user_id = values.user_id;
 
         data = await this.modelInstance.qaAll(para);
         return this.success(data);
