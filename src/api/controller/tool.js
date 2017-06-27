@@ -38,11 +38,11 @@ export default class extends think.controller.rest {
         }
 
         let title = this.get('title');
-        let pageNo = this.get('pageNo');
+        let pageNo = this.get('pageNo') || 1;
         let pageSize = this.get('pageSize') || 10;
         let where = {};
         if (title) where.title = ['like', '%' + title + '%'];
-        data = await this.modelInstance.page(pageNo, pageSize).where(where).countSelect();
+        data = await this.modelInstance.page(pageNo, pageSize).order('id DESC').where(where).countSelect();
         return this.success(data);
     }
 

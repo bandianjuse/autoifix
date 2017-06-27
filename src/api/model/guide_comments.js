@@ -13,20 +13,20 @@ export default class extends think.model.relation {
     }
 
     /**
-     * 综合查询
+     * 用户信息加评论查询
      */
-    async qaAll(para) {
+    async userCommentsQuery(para) {
         this.relation = {
-            qa_comments: {
-                type: think.model.HAS_MANY,
-                key : 'id',
-                fKey: 'qa_id',
+            users: {
+                type: think.model.BELONG_TO,
+                key : 'user_id',
+                fKey: 'id',
+                field : 'id,account,nickname,avatar'
                 //field: 'account,avatar'
             },
         };
         //return await this.where({[this.pk] : pk}).find();
-        return await this.page(para.pageNo, para.pageSize).where(para.where).order('id DESC').countSelect();
-
+        return await this.page(para.pageNo, para.pageSize).order('id DESC').where({guide_id : para.guide_id}).countSelect();
     }
 
     

@@ -98,9 +98,16 @@ export default class extends Base {
      * 点赞查询
      */
     async thumbupAction() {
-        let userId = this.get('user_id');
+        let values = this.get();
+
+        let para = {
+            pageNo : values.pageNo || 1,
+            pageSize : values.pageSize || 10,
+            user_id :  values.user_id || ''
+        };
+        if(values.guide_id) para.guide_id = values.guide_id;
         let model = this.model('users');
-        let data = await model.userThumbUp(userId);
+        let data = await model.userThumbUp(para);
         return this.success(data);
     }
 

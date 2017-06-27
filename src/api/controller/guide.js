@@ -31,15 +31,19 @@ export default class extends think.controller.rest {
         }
 
         let title = this.get('title');
+        let thumbupNum = this.get('thumbup_num');
         let state = this.get('state');
         let userId = this.get('user_id');
-        let pageNo = this.get('pageNo');
+        let pageNo = this.get('pageNo') || 1;
         let pageSize = this.get('pageSize') || 10;
         let where = {};
+        let order = ''
         if (title) where.title = ['like', '%' + title + '%'];
         if (state) where.state = state;
         if(userId) where.user_id = userId;
-        data = await this.modelInstance.page(pageNo, pageSize).where(where).countSelect();
+        if(thumbupNum) order = 'thumbup_num DESC';
+
+        data = await this.modelInstance.page(pageNo, pageSize).where(where).order(order).countSelect();
         return this.success(data);
     }
 
